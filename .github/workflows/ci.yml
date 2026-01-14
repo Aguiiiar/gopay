@@ -2,7 +2,7 @@ name: CI
 
 on: [push, pull_request]
 jobs:
-  test:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -12,8 +12,22 @@ jobs:
           go-version: "1.25.x"
       # - name: Install dependencies
       #   run: go mod download
-      - name: Run tests
+      - name: Test (unit)
         run: go test ./...
 
       - name: Run Vet
         run: go vet ./...
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+
+      - name: Test (integration)
+        env:
+          MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
+          MP_BASE_URL: ${{ secrets.MP_BASE_URL }}
+        run: |
+          go test ./... -tags=integration -v
