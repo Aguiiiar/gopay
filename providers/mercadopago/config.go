@@ -1,6 +1,10 @@
 package mercadopago
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/Aguiiiar/gopay/providers/mercadopago/mperrors"
+)
 
 type Config struct {
 	AccessToken string
@@ -9,7 +13,7 @@ type Config struct {
 
 func (c Config) IsValid() error {
 	if c.AccessToken == "" {
-		return fmt.Errorf("%w: AccessToken is required", ErrInvalidConfig)
+		return fmt.Errorf("%w: AccessToken is required", mperrors.ErrInvalidConfig)
 	}
 
 	return nil

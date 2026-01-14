@@ -1,16 +1,20 @@
-package mercadopago
+package mercadopago_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/Aguiiiar/gopay/providers/mercadopago"
+)
 
 func TestNew_WhenConfigInvalid_ReturnsError(t *testing.T) {
-	_, err := New(Config{})
+	_, err := mercadopago.New(mercadopago.Config{})
 	if err == nil {
 		t.Fatalf("expected error, got nil")
 	}
 }
 
 func TestNew_WhenConfigValid_ReturnsProvider(t *testing.T) {
-	p, err := New(Config{
+	p, err := mercadopago.New(mercadopago.Config{
 		BaseURL:     "https://api.mercadopago.com",
 		AccessToken: "token",
 	})

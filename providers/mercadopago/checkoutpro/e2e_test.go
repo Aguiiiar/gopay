@@ -1,4 +1,4 @@
-package mercadopago_test
+package checkoutpro_test
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/Aguiiiar/gopay/providers/mercadopago"
+	"github.com/Aguiiiar/gopay/providers/mercadopago/checkoutpro"
 )
 
 func TestE2E_CreatePreference(t *testing.T) {
@@ -24,7 +25,6 @@ func TestE2E_CreatePreference(t *testing.T) {
 	}
 
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// 1) valida método e path
 		if r.Method != http.MethodPost {
 			t.Fatalf("expected POST, got %s", r.Method)
 		}
@@ -32,12 +32,10 @@ func TestE2E_CreatePreference(t *testing.T) {
 			t.Fatalf("expected /checkout/preferences, got %s", r.URL.Path)
 		}
 
-		// 2) valida auth
 		if got := r.Header.Get("Authorization"); got != "Bearer token_123" {
 			t.Fatalf("expected Authorization 'Bearer token_123', got %q", got)
 		}
 
-		// 3) valida JSON enviado
 		raw, err := io.ReadAll(r.Body)
 		if err != nil {
 			t.Fatalf("read body error: %v", err)
@@ -62,7 +60,6 @@ func TestE2E_CreatePreference(t *testing.T) {
 			t.Fatalf("expected currency BRL, got %q", body.Items[0].CurrencyID)
 		}
 
-		// 4) responde como Mercado Pago faria
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		_, _ = w.Write([]byte(`{
@@ -73,7 +70,6 @@ func TestE2E_CreatePreference(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	// provider real + httpclient interno
 	mp, err := mercadopago.New(mercadopago.Config{
 		BaseURL:     srv.URL,
 		AccessToken: "token_123",
@@ -82,12 +78,14 @@ func TestE2E_CreatePreference(t *testing.T) {
 		t.Fatalf("New error: %v", err)
 	}
 
-	out, err := mp.CreatePreference(context.Background(), mercadopago.CreatePreferenceInput{
-		Items: []mercadopago.PreferenceItem{
+	cp := mp.CheckoutPro()
+	cid := checkoutpro.CurrencyIDBRL
+	out, err := cp.CreatePreference(context.Background(), checkoutpro.CreatePreferenceInput{
+		Items: []checkoutpro.PreferenceItem{
 			{
 				Title:      "Produto A",
 				Quantity:   2,
-				CurrencyID: "BRL",
+				CurrencyID: &cid,
 				UnitPrice:  10.50,
 			},
 		},
