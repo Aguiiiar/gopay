@@ -11,13 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.22.x"
-
-    - name: Test (integration)
-      env:
-        MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
-        MP_BASE_URL: ${{ secrets.MP_BASE_URL }}
+          go-version: "1.25.x"
+      - name: Test (integration)
+        env:
+          MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
+          MP_BASE_URL: ${{ secrets.MP_BASE_URL }}
         run: go test ./... -tags=integration -v
