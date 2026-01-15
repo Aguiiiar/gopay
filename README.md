@@ -36,15 +36,15 @@ Status: **In progress**
 
 Currently being developed:
 
-• Checkout Pro  
-• Create Preference  
-• Get Preference  
-• Typed error handling  
-• Real integration tests  
+• Checkout Pro
+• Create Preference [✅]  
+• Get Preference [✅]
+• Typed error handling [✅]  
+• Real integration tests  [✅]
 
 Planned next steps:
 
-• Checkout API (Payments)  
+• Checkout API (Payments)  [⏳]
 • Pix  
 • Boleto  
 • Webhooks  
