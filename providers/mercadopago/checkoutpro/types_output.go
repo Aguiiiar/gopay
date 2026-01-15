@@ -92,3 +92,36 @@ type PaymentMethodsOutput struct {
 	Installments           int        `json:"installments,omitempty"`
 	DefaultInstallments    any        `json:"default_installments,omitempty"`
 }
+
+type UpdatePreferenceOutput struct {
+	AutoReturn         string                 `json:"auto_return,omitempty"`
+	BackURLs           *BackURLs              `json:"back_urls,omitempty"`
+	BinaryMode         bool                   `json:"binary_mode,omitempty"`
+	ClientID           string                 `json:"client_id,omitempty"`
+	CollectorID        int64                  `json:"collector_id,omitempty"`
+	CouponCode         any                    `json:"coupon_code,omitempty"`
+	CouponLabels       any                    `json:"coupon_labels,omitempty"`
+	DateCreated        string                 `json:"date_created,omitempty"`
+	DateOfExpiration   string                 `json:"date_of_expiration,omitempty"`
+	ExpirationDateFrom string                 `json:"expiration_date_from,omitempty"`
+	ExpirationDateTo   string                 `json:"expiration_date_to,omitempty"`
+	Expires            bool                   `json:"expires,omitempty"`
+	ID                 string                 `json:"id,omitempty"`
+	InitPoint          string                 `json:"init_point,omitempty"`
+	IntermalMetadata   any                    `json:"internal_metadata,omitempty"`
+	Items              []PreferenceItemOutput `json:"items,omitempty"`
+	Marketplace        string                 `json:"marketplace,omitempty"`
+	MarketplaceFee     float64                `json:"marketplace_fee,omitempty"`
+	NotificationURL    string                 `json:"notification_url,omitempty"`
+	Payer              *PayerOutput           `json:"payer,omitempty"`
+	PaymentMethods     *PaymentMethodsOutput  `json:"payment_methods,omitempty"`
+	ProcessingModes    any                    `json:"processing_modes,omitempty"`
+	ProductID          any                    `json:"product_id,omitempty"`
+	RedirectURLs       any                    `json:"redirect_urls,omitempty"`
+	SandboxInitPoint   string                 `json:"sandbox_init_point,omitempty"`
+	SiteID             string                 `json:"site_id,omitempty"`
+	Shipments          any                    `json:"shipments,omitempty"`
+	TotalAmount        any                    `json:"total_amount,omitempty"`
+	LastUpdated        any                    `json:"last_updated,omitempty"`
+	OperationType      string                 `json:"operation_type,omitempty"`
+}

@@ -65,3 +65,26 @@ func (p *Client) GetPreference(ctx context.Context, preferenceID string) (GetPre
 
 	return output, nil
 }
+
+// UpdatePreference updates an existing Checkout Pro preference in Mercado Pago.
+//
+// API reference:
+// https://www.mercadopago.com.br/developers/en/reference/preferences/_checkout_preferences/{id}/put
+func (p *Client) UpdatePreference(ctx context.Context, preferenceID string, input UpdatePreferenceInput) (UpdatePreferenceOutput, error) {
+	path := fmt.Sprintf("/checkout/preferences/%s", preferenceID)
+	response, err := p.hc.DoJSON(ctx, http.MethodPut, path, input, nil)
+	if err != nil {
+		return UpdatePreferenceOutput{}, err
+	}
+
+	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		return UpdatePreferenceOutput{}, mperrors.Parse(response.StatusCode, response.Body)
+	}
+
+	var output UpdatePreferenceOutput
+	if err := json.Unmarshal(response.Body, &output); err != nil {
+		return UpdatePreferenceOutput{}, fmt.Errorf("MercadoPago: unmarshal update preference response: %w", err)
+	}
+
+	return output, nil
+}

@@ -1,4 +1,5 @@
 //go:build integration
+// +build integration
 
 package checkoutpro_test
 
@@ -133,5 +134,80 @@ func TestCheckoutProIntegration_GetPreference_Real(t *testing.T) {
 
 	if len(got.Items) == 0 {
 		t.Fatalf("expected items, got 0")
+	}
+}
+
+func TestCheckoutProIntegration_UpdatePreference_Real(t *testing.T) {
+	token := os.Getenv("MP_ACCESS_TOKEN")
+	if token == "" {
+		t.Skip("MP_ACCESS_TOKEN not set")
+	}
+
+	baseURL := os.Getenv("MP_BASE_URL")
+	if baseURL == "" {
+		baseURL = "https://api.mercadopago.com"
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	mp, err := mercadopago.New(mercadopago.Config{
+		BaseURL:     baseURL,
+		AccessToken: token,
+	})
+	if err != nil {
+		t.Fatalf("New error: %v", err)
+	}
+
+	cli := mp.CheckoutPro()
+	cid := checkoutpro.CurrencyIDBRL
+	created, err := cli.CreatePreference(ctx, checkoutpro.CreatePreferenceInput{
+		Items: []checkoutpro.PreferenceItem{
+			{
+				Title:      "GoPay Integration Test - UpdatePreference",
+				Quantity:   1,
+				UnitPrice:  1.00,
+				CurrencyID: &cid,
+			},
+		},
+		ExternalReference: "gopay-integration-update-preference",
+	})
+	if err != nil {
+		t.Fatalf("CreatePreference error: %v", err)
+	}
+	if created.ID == "" {
+		t.Fatalf("expected preference id, got empty")
+	}
+
+	t.Log("Preference created")
+	t.Logf("Preference ID: %s", created.ID)
+	newTitle := "GoPay Integration Test - Updated Title"
+
+	updated, err := cli.UpdatePreference(ctx, created.ID, checkoutpro.UpdatePreferenceInput{
+		Items: &[]checkoutpro.PreferenceItem{
+			{
+				Title:      newTitle,
+				Quantity:   1,
+				UnitPrice:  1.00,
+				CurrencyID: &cid,
+			},
+		},
+	})
+	if err != nil {
+		t.Fatalf("UpdatePreference error: %v", err)
+	}
+
+	t.Log("Preference created")
+	t.Logf("Preference ID: %s", created.ID)
+	t.Logf("InitPoint (before): %s", created.InitPoint)
+	t.Logf("SandboxInitPoint (before): %s", created.SandboxInitPoint)
+	if updated.ID != created.ID {
+		t.Fatalf("expected id %s, got %s", created.ID, updated.ID)
+	}
+	if len(updated.Items) == 0 {
+		t.Fatalf("expected items, got 0")
+	}
+	if updated.Items[0].Title != newTitle {
+		t.Fatalf("expected item title %s, got %s", newTitle, updated.Items[0].Title)
 	}
 }

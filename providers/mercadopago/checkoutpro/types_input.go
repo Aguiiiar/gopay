@@ -81,3 +81,20 @@ type ReceiverAddress struct {
 	StreetNumber int    `json:"street_number,omitempty"`
 	CountryName  string `json:"country_name,omitempty"`
 }
+
+type UpdatePreferenceInput struct {
+	Items              *[]PreferenceItem `json:"items,omitempty"`
+	Payers             *Payers           `json:"payer,omitempty"`
+	PaymentMethods     *PaymentMethods   `json:"payment_methods,omitempty"`
+	Shipments          *Shipments        `json:"shipments,omitempty"`
+	BackURLs           *BackURLs         `json:"back_urls,omitempty"`
+	NotificationURL    *string           `json:"notification_url,omitempty"`
+	AdditionalInfo     *string           `json:"additional_info,omitempty"`
+	AutoReturn         *AutoReturn       `json:"auto_return,omitempty"`
+	ExternalReference  *string           `json:"external_reference,omitempty"`
+	Expires            *bool             `json:"expires,omitempty"`
+	ExpirationDateFrom *string           `json:"expiration_date_from,omitempty"`
+	ExpirationDateTo   *string           `json:"expiration_date_to,omitempty"`
+	Marketplace        *string           `json:"marketplace,omitempty"`
+	Metadata           *any              `json:"metadata,omitempty"`
+}

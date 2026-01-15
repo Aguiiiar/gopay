@@ -15,3 +15,10 @@ const (
 	CurrencyIDPEN CurrencyID = "PEN"
 	CurrencyIDUYU CurrencyID = "UYU"
 )
+
+type AutoReturn string
+
+const (
+	AutoReturnApproved AutoReturn = "approved"
+	AutoReturnAll      AutoReturn = "all"
+)
